@@ -6,7 +6,7 @@
 How to use:
 
 ```
-npm instal && npm start
+npm install && npm start
 ```
 
 It's that easy!
