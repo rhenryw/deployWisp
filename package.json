@@ -1,0 +1,25 @@
+{
+  "name": "deploywisp",
+  "version": "1.0.0",
+  "description": "An easily deployed WISP server",
+  "homepage": "https://github.com/tf7software/deployWisp#readme",
+  
+  "bugs": {
+    "url": "https://github.com/tf7software/deployWisp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tf7software/deployWisp.git"
+  },
+  "license": "AGPL-3.0-or-later",
+  "author": "Mecury Network, RHW",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "wisp-server-node": "^1.1.7"
+  }
+}
