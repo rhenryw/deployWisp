@@ -11,4 +11,4 @@ npm install && npm start
 
 It's that easy!
 
-Your brand new shiny wisp server will be at `wss://yourdomain.tld/wisp/`
+Your brand new shiny wisp server will be at `wss://domain.tld/` or `wss://your.domain.tld/`
