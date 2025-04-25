@@ -19,7 +19,6 @@
     "start": "node main.js"
   },
   "dependencies": {
-    "@mercuryworkshop/wisp-js": "^0.3.3",
-    "wisp-server-node": "^1.1.7"
+    "@mercuryworkshop/wisp-js": "^0.3.3"
   }
 }
