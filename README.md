@@ -1,6 +1,6 @@
 # deployWISP
 
-## An easily deployable repo for [WSN by Hg Workshop](https://github.com/MercuryWorkshop/wisp-server-node)
+## An easily deployable repo for [WCJ by Hg Workshop](https://github.com/MercuryWorkshop/wisp-client-js)
 
 ---
 How to use:
