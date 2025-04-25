@@ -23,4 +23,4 @@ server.on("listening", () => {
   console.log(`HTTP server listening on ${PORT}`);
 });
 
-server.listen(PORT, "localhost");
+server.listen(PORT, "0.0.0.0");
