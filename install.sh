@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# run with: curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash
 # Exit immediately if a command exits with a non-zero status
 set -e
 

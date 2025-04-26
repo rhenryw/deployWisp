@@ -5,9 +5,12 @@
 ---
 How to use:
 
+Just run
 ```
-npm install && npm start
+curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash
 ```
+
+It will install and start by itself!
 
 It's that easy!
 
