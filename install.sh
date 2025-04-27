@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# run with: curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash
 # Exit immediately if a command exits with a non-zero status
 set -e
 
@@ -20,10 +19,19 @@ echo "
 |__|  |__|__|________|
                       
 "
+
+# Prompt the user to enter the domain
+read -p "Please enter your domain (e.g., example.com): " DOMAIN
+
+if [ -z "$DOMAIN" ]; then
+  echo "Error: Domain cannot be empty. Please run the script again and provide a valid domain."
+  exit 1
+fi
+
 # Update package list and install prerequisites
 echo "Updating package list and installing prerequisites..."
 sudo apt update
-sudo apt install -y curl git sudo
+sudo apt install -y curl git sudo nginx certbot python3-certbot-nginx
 
 # Install Node.js and npm
 echo "Installing Node.js and npm..."
@@ -48,7 +56,7 @@ cd $TARGET_DIR
 echo "Installing npm dependencies..."
 npm install
 
-# Start the  pm2
+# Start the pm2
 echo "Starting the application with pm2..."
 pm2 start npm --name "deployWisp" -- start
 
@@ -57,4 +65,38 @@ echo "Setting up pm2 to start on boot..."
 pm2 startup
 pm2 save
 
+# Set up NGINX
+echo "Setting up NGINX for WebSocket forwarding..."
+sudo bash -c "cat >/etc/nginx/sites-available/deploywisp.conf <<'EOF'
+server {
+  listen 80;
+  server_name $DOMAIN;
+  return 301 https://\$host\$request_uri;
+}
+server {
+  listen 443 ssl http2;
+  server_name $DOMAIN;
+  ssl_certificate     /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
+
+  location / {
+    proxy_pass         http://127.0.0.1:8080;
+    proxy_http_version 1.1;
+    proxy_set_header   Upgrade \$http_upgrade;
+    proxy_set_header   Connection "upgrade";
+    proxy_set_header   Host \$host;
+  }
+}
+EOF"
+
+# Enable the NGINX configuration
+sudo ln -sf /etc/nginx/sites-available/deploywisp.conf /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+
+# Obtain SSL certificate using Certbot
+echo "Obtaining SSL certificate with Certbot..."
+sudo certbot --nginx -d $DOMAIN --non-interactive --agree-tos -m you@your.email
+
+echo "NGINX has been set up to forward WebSocket traffic, and SSL has been configured."
 echo "Application has been set up to start on boot and run indefinitely."
