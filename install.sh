@@ -85,8 +85,7 @@ server {
 }
 
 server {
-    listen 443 ssl;
-    http2;
+    listen 443 ssl http2;
     server_name $DOMAIN;
 
     ssl_certificate     /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
@@ -120,4 +119,4 @@ sudo nginx -t
 echo "Reloading NGINX..."
 sudo systemctl reload nginx
 
-echo "Setup complete! Your application is now running behind NGINX with WebSocket support and HTTPS."
+echo "Setup complete! Your application is now running behind Nginx with WebSocket support, HTTP/2, and HTTPS."
