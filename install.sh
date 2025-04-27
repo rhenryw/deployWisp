@@ -55,6 +55,8 @@ echo "Installing pm2..."
 sudo npm install -g pm2
 
 # Clone the repository
+echo "Updating and clearing old repo"
+rm -rf deployWisp
 echo "Cloning deployWisp repository..."
 REPO_URL="https://github.com/rhenryw/deployWisp.git"
 TARGET_DIR="deployWisp"
@@ -74,24 +76,14 @@ echo "Configuring pm2 to start on boot..."
 pm2 startup systemd -u "$USER" --hp "$HOME"
 pm2 save
 
-# Generate a self-signed certificate for wss
-echo "Generating self-signed certificate for $DOMAIN..."
-sudo mkdir -p /etc/nginx/ssl
-sudo openssl req -x509 -nodes -days 365 \
-  -newkey rsa:2048 \
-  -keyout /etc/nginx/ssl/self.key \
-  -out /etc/nginx/ssl/self.crt \
-  -subj "/CN=$DOMAIN"
 
 # NGINX configuration (wss only)
 echo "Writing NGINX configuration for secure WebSocket (wss) proxy..."
 sudo tee /etc/nginx/sites-available/deploywisp.conf > /dev/null <<EOF
 server {
-    listen 443 ssl;
+    listen 80;
     server_name $DOMAIN;
 
-    ssl_certificate     /etc/nginx/ssl/self.crt;
-    ssl_certificate_key /etc/nginx/ssl/self.key;
 
     location / {
         proxy_pass         http://127.0.0.1:8080;
