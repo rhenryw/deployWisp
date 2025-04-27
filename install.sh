@@ -105,11 +105,13 @@ EOF
 
 sudo ln -sf /etc/nginx/sites-available/deploywisp.conf /etc/nginx/sites-enabled/
 
-# Test and reload NGINX
+# Enable and start NGINX
+echo "Enabling and starting NGINX..."
+sudo systemctl enable nginx
+sudo systemctl start nginx
+
+# Test configuration
 echo "Testing NGINX configuration..."
 sudo nginx -t
-
-echo "Reloading NGINX..."
-sudo systemctl reload nginx
 
 echo "Setup complete! Your application is now running behind Nginx with secure WebSocket (wss) using a self-signed cert."
