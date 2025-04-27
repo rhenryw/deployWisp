@@ -4,7 +4,24 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-echo "deployWisp by rhw"
+echo "
+
+ _____               __                        __              
+|     \.-----.-----.|  |.-----.--.--.--.--.--.|__|.-----.-----.
+|  --  |  -__|  _  ||  ||  _  |  |  |  |  |  ||  ||__ --|  _  |
+|_____/|_____|   __||__||_____|___  |________||__||_____|   __|
+             |__|             |_____|                   |__|   
+
+by:"
+echo"
+██████╗ ██╗  ██╗██╗    ██╗
+██╔══██╗██║  ██║██║    ██║
+██████╔╝███████║██║ █╗ ██║
+██╔══██╗██╔══██║██║███╗██║
+██║  ██║██║  ██║╚███╔███╔╝
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ 
+                          
+"
 # Update package list and install prerequisites
 echo "Updating package list and installing prerequisites..."
 sudo apt update
