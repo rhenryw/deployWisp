@@ -90,6 +90,8 @@ server {
     listen 443 ssl;
     server_name $DOMAIN;
 
+    ssl_certificate     /etc/nginx/ssl/self.crt;
+    ssl_certificate_key /etc/nginx/ssl/self.key;
 
     location / {
         proxy_pass         http://127.0.0.1:8080;
