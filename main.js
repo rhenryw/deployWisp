@@ -1,7 +1,7 @@
 const { server: wisp, logging } = require("@mercuryworkshop/wisp-js/server");
 const http = require("node:http");
 
-const PORT = 80; // For different hosting providers
+const PORT = 8080; // For different hosting providers
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
