@@ -14,4 +14,5 @@ It will install and start by itself!
 
 It's that easy!
 
+NOTE: This has only been tested on ubuntu
 Your brand new shiny wisp server will be at `wss://domain.tld/` or `wss://your.domain.tld/`
