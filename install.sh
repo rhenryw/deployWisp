@@ -5,7 +5,7 @@
 
 set -e
 
-# ASCII banner
+
 cat <<'BANNER'
 
  _____               __                        __              
@@ -23,7 +23,7 @@ cat <<'BANNER'
                       
 BANNER
 
-# Determine domain from argument
+# Domain
 if [ -n "$1" ]; then
   DOMAIN=$1
 elif [ -n "$DOMAIN" ]; then
@@ -40,7 +40,7 @@ if ! command -v sudo >/dev/null; then
   apt-get install -y sudo
 fi
 
-# Install system dependencies
+# Install dependencies
 echo "Installing system dependencies..."
 sudo apt-get update
 sudo apt-get install -y curl git nginx openssl
@@ -50,11 +50,11 @@ echo "Installing Node.js (v22.x)..."
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-# Install pm2 process manager
+# Install pm2
 echo "Installing pm2..."
 sudo npm install -g pm2
 
-# Clone the repository
+# Clone the repo
 echo "Updating and clearing old repo"
 rm -rf deployWisp
 echo "Cloning deployWisp repository..."
@@ -63,7 +63,7 @@ TARGET_DIR="deployWisp"
 git clone "$REPO_URL"
 cd "$TARGET_DIR"
 
-# Install application dependencies
+# Install dependences
 echo "Installing npm dependencies..."
 npm install
 
@@ -77,7 +77,7 @@ pm2 startup systemd -u "$USER" --hp "$HOME"
 pm2 save
 
 
-# NGINX configuration (wss only)
+# NGINX
 echo "Writing NGINX configuration for secure WebSocket (wss) proxy..."
 sudo tee /etc/nginx/sites-available/deploywisp.conf > /dev/null <<EOF
 server {
@@ -97,13 +97,13 @@ EOF
 
 sudo ln -sf /etc/nginx/sites-available/deploywisp.conf /etc/nginx/sites-enabled/
 
-# Enable and start NGINX
+# Start NGINX
 echo "Enabling and starting NGINX..."
 sudo systemctl enable nginx
 sudo systemctl start nginx
 
-# Test configuration
+# Test 
 echo "Testing NGINX configuration..."
 sudo nginx -t
 
-echo "Setup complete! Your application is now running behind Nginx with secure WebSocket (wss) using a self-signed cert."
+echo "Setup complete! WISP is now running!. You can access it at wss://$DOMAIN"
