@@ -20,8 +20,7 @@ echo"
 ██╔══██╗██╔══██║██║███╗██║
 ██║  ██║██║  ██║╚███╔███╔╝
 ╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ 
-                          
-"
+                          "
 # Update package list and install prerequisites
 echo "Updating package list and installing prerequisites..."
 sudo apt update
