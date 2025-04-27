@@ -36,6 +36,7 @@ fi
 
 # Update package list and install prerequisites
 echo "Updating package list and installing prerequisites..."
+apt install sudo
 sudo apt update
 sudo apt install -y curl git sudo nginx certbot python3-certbot-nginx
 
