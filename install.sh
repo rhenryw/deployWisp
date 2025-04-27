@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Usage:
-#   curl -fsSL https://cdn.rhw.one/deployWisp | bash -s yourdomain.tld
+#   curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld
+
 
 set -e
 
