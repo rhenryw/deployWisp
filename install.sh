@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# Usage: curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s urdomain.tld
 # Exit immediately if a command exits with a non-zero status
 set -e
 
@@ -20,14 +22,16 @@ echo "
                       
 "
 
-# Check if DOMAIN is already set, otherwise prompt the user
+# Check if DOMAIN is set as an environment variable or passed as an argument
 if [ -z "$DOMAIN" ]; then
-  read -p "Please enter your domain (e.g., example.com): " DOMAIN
-fi
-
-if [ -z "$DOMAIN" ]; then
-  echo "Error: Domain cannot be empty. Please run the script again and provide a valid domain."
-  exit 1
+  if [ -n "$1" ]; then
+    DOMAIN=$1
+  else
+    echo "Error: Domain is not set. Please provide it as an environment variable or as a command-line argument."
+    echo "Usage: DOMAIN=example.com bash install.sh"
+    echo "   or: bash install.sh example.com"
+    exit 1
+  fi
 fi
 
 # Update package list and install prerequisites
