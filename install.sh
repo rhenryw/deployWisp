@@ -8,7 +8,7 @@ echo "deployWisp by rhw"
 # Update package list and install prerequisites
 echo "Updating package list and installing prerequisites..."
 sudo apt update
-sudo apt install -y curl git
+sudo apt install -y curl git sudo
 
 # Install Node.js and npm
 echo "Installing Node.js and npm..."
