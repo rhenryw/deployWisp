@@ -7,8 +7,10 @@ How to use:
 
 Just run
 ```
-curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld
+
 ```
+Replace `yourdomain.tld ` with your domain or subdomain.
 
 It will install and start by itself!
 
