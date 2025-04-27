@@ -43,7 +43,7 @@ fi
 # Install system dependencies
 echo "Installing system dependencies..."
 sudo apt-get update
-sudo apt-get install -y curl git nginx certbot python3-certbot-nginx
+sudo apt-get install -y curl git nginx openssl
 
 # Install Node.js and npm
 echo "Installing Node.js (v22.x)..."
@@ -74,15 +74,24 @@ echo "Configuring pm2 to start on boot..."
 pm2 startup systemd -u "$USER" --hp "$HOME"
 pm2 save
 
-# NGINX configuration (wss-only)
+# Generate a self-signed certificate for wss
+echo "Generating self-signed certificate for $DOMAIN..."
+sudo mkdir -p /etc/nginx/ssl
+sudo openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout /etc/nginx/ssl/self.key \
+  -out /etc/nginx/ssl/self.crt \
+  -subj "/CN=$DOMAIN"
+
+# NGINX configuration (wss only)
 echo "Writing NGINX configuration for secure WebSocket (wss) proxy..."
 sudo tee /etc/nginx/sites-available/deploywisp.conf > /dev/null <<EOF
 server {
     listen 443 ssl;
     server_name $DOMAIN;
 
-    ssl_certificate     /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
+    ssl_certificate     /etc/nginx/ssl/self.crt;
+    ssl_certificate_key /etc/nginx/ssl/self.key;
 
     location / {
         proxy_pass         http://127.0.0.1:8080;
@@ -96,15 +105,6 @@ EOF
 
 sudo ln -sf /etc/nginx/sites-available/deploywisp.conf /etc/nginx/sites-enabled/
 
-# Obtain a real certificate but do NOT configure HTTP redirect
-echo "Obtaining Let's Encrypt certificate (wss only, no HTTP redirect)..."
-sudo certbot --nginx \
-  --no-redirect \
-  --agree-tos \
-  --no-eff-email \
-  -m you@your.email \
-  -d "$DOMAIN"
-
 # Test and reload NGINX
 echo "Testing NGINX configuration..."
 sudo nginx -t
@@ -112,4 +112,4 @@ sudo nginx -t
 echo "Reloading NGINX..."
 sudo systemctl reload nginx
 
-echo "Setup complete! Your application is now running behind NGINX with secure WebSocket (wss)."  
+echo "Setup complete! Your application is now running behind Nginx with secure WebSocket (wss) using a self-signed cert."
