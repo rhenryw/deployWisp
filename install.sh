@@ -68,11 +68,12 @@ npm install
 
 # Start the application with pm2
 echo "Starting application with pm2..."
-pm run start:pm2 || pm2 start npm --name "deployWisp" -- start
+npm run start:pm2 || pm2 start npm --name "deployWisp" -- start
 
+# Configure pm2 to start on boot
 echo "Configuring pm2 to start on boot..."
-pm pm2 startup systemd -u $USER --hp $HOME
-pm save
+pm2 startup systemd -u "$USER" --hp "$HOME"
+pm2 save
 
 # NGINX configuration
 echo "Writing NGINX configuration for WebSocket forwarding..."
