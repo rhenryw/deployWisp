@@ -20,8 +20,10 @@ echo "
                       
 "
 
-# Prompt the user to enter the domain
-read -p "Please enter your domain (e.g., example.com): " DOMAIN
+# Check if DOMAIN is already set, otherwise prompt the user
+if [ -z "$DOMAIN" ]; then
+  read -p "Please enter your domain (e.g., example.com): " DOMAIN
+fi
 
 if [ -z "$DOMAIN" ]; then
   echo "Error: Domain cannot be empty. Please run the script again and provide a valid domain."
