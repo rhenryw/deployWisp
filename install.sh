@@ -27,7 +27,6 @@ BANNER
 if [ -n "$1" ]; then
   DOMAIN=$1
 elif [ -n "$DOMAIN" ]; then
-  # DOMAIN environment variable was set
   :
 else
   echo "Error: Domain not provided."
@@ -75,17 +74,11 @@ echo "Configuring pm2 to start on boot..."
 pm2 startup systemd -u "$USER" --hp "$HOME"
 pm2 save
 
-# NGINX configuration
-echo "Writing NGINX configuration for WebSocket forwarding..."
+# NGINX configuration (wss-only)
+echo "Writing NGINX configuration for secure WebSocket (wss) proxy..."
 sudo tee /etc/nginx/sites-available/deploywisp.conf > /dev/null <<EOF
 server {
-    listen 80;
-    server_name $DOMAIN;
-    return 301 https://\$host\$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
+    listen 443 ssl;
     server_name $DOMAIN;
 
     ssl_certificate     /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
@@ -101,16 +94,16 @@ server {
 }
 EOF
 
-# Enable and obtain SSL certificate
 sudo ln -sf /etc/nginx/sites-available/deploywisp.conf /etc/nginx/sites-enabled/
 
-echo "Obtaining and installing Let's Encrypt certificate..."
+# Obtain a real certificate but do NOT configure HTTP redirect
+echo "Obtaining Let's Encrypt certificate (wss only, no HTTP redirect)..."
 sudo certbot --nginx \
-  --redirect \
+  --no-redirect \
   --agree-tos \
   --no-eff-email \
   -m you@your.email \
-  -d $DOMAIN
+  -d "$DOMAIN"
 
 # Test and reload NGINX
 echo "Testing NGINX configuration..."
@@ -119,4 +112,4 @@ sudo nginx -t
 echo "Reloading NGINX..."
 sudo systemctl reload nginx
 
-echo "Setup complete! Your application is now running behind Nginx with WebSocket support, HTTP/2, and HTTPS."
+echo "Setup complete! Your application is now running behind NGINX with secure WebSocket (wss)."  
