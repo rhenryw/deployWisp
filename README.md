@@ -37,4 +37,4 @@ Enter `wss://yourdomain.tld` and hit connect, if it says
 
 Open an issue
 
-NOTE: This has only been tested on ubuntu
+NOTE: This has only been tested on newer ubuntu and debian
