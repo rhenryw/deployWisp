@@ -1,6 +1,6 @@
 # deployWISP
 
-[![Join Our Discord](https://img.shields.io/badge/Join%20Our-Discord-purple)](https://discord.gg/redlv) [![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)](https://github.com/rhenryw/UV-Static-2.0/commits/main/)
+[![Join Our Discord](https://img.shields.io/badge/Join%20Our-Discord-purple)](https://discord.gg/redlv) [![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)](https://github.com/rhenryw/deployWisp/commits/main/)
 
 ## An easily deployable repo for [WCJ by Hg Workshop](https://github.com/MercuryWorkshop/wisp-client-js)
 
@@ -18,7 +18,7 @@ Then run
 curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld
 
 ```
-Replace `yourdomain.tld ` with your domain or subdomain.
+Replace `yourdomain.tld` with your domain or subdomain.
 
 It will install and start by itself!
 
