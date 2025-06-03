@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => {
 });
 
 logging.set_level(logging.DEBUG);
-wisp.options.port_whitelist = [np
+wisp.options.port_whitelist = [
   [5000, 6000],
   80,
   443
