@@ -1,4 +1,5 @@
 # deployWISP
+## ⭐️ if you use!
 
 [![Join Our Discord](https://img.shields.io/badge/Join%20Our-Discord-purple)](https://discord.gg/redlv) [![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)](https://github.com/rhenryw/deployWisp/commits/main/)
 
