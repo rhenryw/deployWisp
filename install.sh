@@ -113,6 +113,23 @@ sudo systemctl start nginx
 echo "Testing NGINX configuration..."
 sudo nginx -t
 
+# --- CERTBOT CONFIG ---
+echo "Installing Certbot..."
+sudo apt-get install -y certbot python3-certbot-nginx
+
+echo "Obtaining SSL certificate for $DOMAIN..."
+sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m me@rhw.one --redirect
+
+# Auto renew setup
+echo "Enabling automatic certificate renewal..."
+sudo systemctl enable certbot.timer
+sudo systemctl start certbot.timer
+
+# Reload NGINX to apply HTTPS
+echo "Reloading NGINX with SSL..."
+sudo nginx -t
+sudo systemctl reload nginx
+
 # Restart
 echo "Restarting NGINX..."
 sudo service nginx restart
