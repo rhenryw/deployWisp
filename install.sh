@@ -108,8 +108,13 @@ echo "Enabling and starting NGINX..."
 sudo systemctl enable nginx
 sudo systemctl start nginx
 
+
 # Test 
 echo "Testing NGINX configuration..."
 sudo nginx -t
+
+# Restart
+echo "Restarting NGINX..."
+sudo service nginx restart
 
 echo "Setup complete! WISP is now running!. You can access it at wss://$DOMAIN"
