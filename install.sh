@@ -46,6 +46,11 @@ echo "Installing system dependencies..."
 sudo apt-get update
 sudo apt-get install -y curl git nginx openssl
 
+# Install Basic Packages (how was this not already here T_T)
+echo "Making sure your CLI is normal"
+sudo apt update
+sudo apt install -y build-essential
+
 # Install Node.js and npm
 echo "Installing Node.js (v22.x)..."
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
