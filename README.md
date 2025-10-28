@@ -19,7 +19,12 @@ Then run
 curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld
 
 ```
-Replace `yourdomain.tld` with your domain or subdomain.
+Replace `yourdomain.tld` with your domain or subdomain. If you need an SSL cert (non-proxied through CloudFlare or `Strict` SSL) run with the `-c` flag:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld -c
+
+```
 
 It will install and start by itself!
 
