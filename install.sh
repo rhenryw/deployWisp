@@ -1,11 +1,10 @@
 #!/bin/bash
 
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld
-
+#   curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld [-c]
+#   Use -c to enable Certbot (SSL) setup.
 
 set -e
-
 
 cat <<'BANNER'
 
@@ -24,14 +23,28 @@ cat <<'BANNER'
                       
 BANNER
 
-# Domain
-if [ -n "$1" ]; then
-  DOMAIN=$1
-elif [ -n "$DOMAIN" ]; then
-  :
-else
+# --- Parse arguments ---
+SSL_ENABLED=false
+
+# Capture domain and flags
+DOMAIN=""
+for arg in "$@"; do
+  case $arg in
+    -c)
+      SSL_ENABLED=true
+      ;;
+    *)
+      if [[ -z "$DOMAIN" ]]; then
+        DOMAIN=$arg
+      fi
+      ;;
+  esac
+done
+
+# --- Domain check ---
+if [ -z "$DOMAIN" ]; then
   echo "Error: Domain not provided."
-  echo "Usage: curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld"
+  echo "Usage: curl -fsSL https://raw.githubusercontent.com/rhenryw/deployWisp/refs/heads/main/install.sh | bash -s yourdomain.tld [-c]"
   exit 1
 fi
 
@@ -46,7 +59,7 @@ echo "Installing system dependencies..."
 sudo apt-get update
 sudo apt-get install -y curl git nginx openssl
 
-# Install Basic Packages (how was this not already here T_T)
+# Install Basic Packages
 echo "Making sure your CLI is normal"
 sudo apt update
 sudo apt install -y build-essential
@@ -69,7 +82,7 @@ TARGET_DIR="deployWisp"
 git clone "$REPO_URL"
 cd "$TARGET_DIR"
 
-# Install dependences
+# Install dependencies
 echo "Installing npm dependencies..."
 npm install
 
@@ -82,14 +95,12 @@ echo "Configuring pm2 to start on boot..."
 pm2 startup systemd -u "$USER" --hp "$HOME"
 pm2 save
 
-
 # NGINX
-echo "Writing NGINX configuration for secure WebSocket (wss) proxy..."
+echo "Writing NGINX configuration for WebSocket proxy..."
 sudo tee /etc/nginx/sites-available/deploywisp.conf > /dev/null <<EOF
 server {
     listen 80;
     server_name $DOMAIN;
-
 
     location / {
         proxy_pass         http://0.0.0.0:8080;
@@ -108,30 +119,35 @@ echo "Enabling and starting NGINX..."
 sudo systemctl enable nginx
 sudo systemctl start nginx
 
-
-# Test 
+# Test configuration
 echo "Testing NGINX configuration..."
 sudo nginx -t
 
-# --- CERTBOT CONFIG ---
-echo "Installing Certbot..."
-sudo apt-get install -y certbot python3-certbot-nginx
+# --- CERTBOT CONFIG (only if -c flag passed) ---
+if [ "$SSL_ENABLED" = true ]; then
+  echo "Installing Certbot..."
+  sudo apt-get install -y certbot python3-certbot-nginx
 
-echo "Obtaining SSL certificate for $DOMAIN..."
-sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m me@rhw.one --redirect
+  echo "Obtaining SSL certificate for $DOMAIN..."
+  sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m me@rhw.one --redirect
 
-# Auto renew setup
-echo "Enabling automatic certificate renewal..."
-sudo systemctl enable certbot.timer
-sudo systemctl start certbot.timer
+  echo "Enabling automatic certificate renewal..."
+  sudo systemctl enable certbot.timer
+  sudo systemctl start certbot.timer
 
-# Reload NGINX to apply HTTPS
-echo "Reloading NGINX with SSL..."
-sudo nginx -t
-sudo systemctl reload nginx
+  echo "Reloading NGINX with SSL..."
+  sudo nginx -t
+  sudo systemctl reload nginx
+fi
 
 # Restart
 echo "Restarting NGINX..."
 sudo service nginx restart
 
-echo "Setup complete! WISP is now running!. You can access it at wss://$DOMAIN"
+echo
+if [ "$SSL_ENABLED" = true ]; then
+  echo "✅ Setup complete! WISP is now running at: https://$DOMAIN"
+else
+  echo "✅ Setup complete! WISP is now running at: http://$DOMAIN"
+  echo "(Run again with -c to enable SSL via Certbot)"
+fi
