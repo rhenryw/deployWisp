@@ -1,3 +1,6 @@
+> [!NOTE]
+> Please use [deployRay](https://github.com/rhenryw/deployRay/), as it is more secure and less detectable. Same deployment proccess.
+
 # deployWISP
 ## ⭐️ if you use!
 
