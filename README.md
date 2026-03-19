@@ -1,5 +1,5 @@
 > [!NOTE]
-> This will soon be superceeded by [deployRay](https://github.com/rhenryw/deployRay/), as it is more secure and less detectable. Same deployment proccess. Still use this for now though.
+> This will soon be superceeded by [deployRay](https://github.com/rhenryw/deployRay/), as it is more secure and less detectable. Use deployRay if you value more websites over speed.
 
 # deployWISP
 ## ⭐️ if you use!
